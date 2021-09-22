@@ -1,0 +1,14 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#app,
+.el-row,
+.el-col,
+.el-container,
+.el-menu {
+  height: 100%;
+}
