@@ -1,114 +1,105 @@
 <template>
-  <el-row type="flex" align="top">
-    <el-card v-for="item in list" :key="item.id" class="box-card">
-      <div class="text item">{{ item.name }}</div>
-      <div class="btn-group">
-        <el-button type="text" class="button">修改</el-button>
-        <el-button type="text" class="button">删除</el-button>
-      </div>
-    </el-card>
-  </el-row>
+  <div>
+    <el-row>
+      <el-button type="success" class="button" @click="addCategory">新增</el-button>
+    </el-row>
+    <el-row type="flex" align="top">
+      <el-card v-for="category in categories" :key="category.id" class="box-card">
+        <div class="text item">{{ category.categoryName }}</div>
+        <div class="btn-group">
+          <el-button type="text" class="button" @click="updateInput(category.id)">修改</el-button>
+          <el-button type="text" class="button" @click="deleteConfirm(category.id)">删除</el-button>
+        </div>
+      </el-card>
+    </el-row>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      list: [
-        {
-          id: 1,
-          name: "ccc",
-        },
-        {
-          id: 2,
-          name: "bbb",
-        },
-        {
-          id: 3,
-          name: "aaa",
-        },
-        {
-          id: 4,
-          name: "ddd",
-        },
-        {
-          id: 5,
-          name: "eee",
-        },
-        {
-          id: 6,
-          name: "fff",
-        },
-        {
-          id: 7,
-          name: "ggg",
-        },
-        {
-          id: 8,
-          name: "ggg",
-        },
-        {
-          id: 9,
-          name: "ggg",
-        },
-        {
-          id: 10,
-          name: "ggg",
-        },
-        {
-          id: 11,
-          name: "ggg",
-        },
-        {
-          id: 12,
-          name: "ggg",
-        },
-        {
-          id: 13,
-          name: "ggg",
-        },
-        {
-          id: 14,
-          name: "ggg",
-        },
-        {
-          id: 15,
-          name: "ggg",
-        },
-        {
-          id: 16,
-          name: "ggg",
-        },
-        {
-          id: 17,
-          name: "ggg",
-        },
-        {
-          id: 18,
-          name: "ggg",
-        },
-        {
-          id: 19,
-          name: "ggg",
-        },
-        {
-          id: 20,
-          name: "ggg",
-        },
-        {
-          id: 21,
-          name: "ggg",
-        },
-        {
-          id: 22,
-          name: "ggg",
-        },
-        {
-          id: 23,
-          name: "ggg",
-        },
-      ],
+      categories: null
     };
+  },
+  mounted() {
+    this.getCategories();
+  },
+  methods: {
+    getCategories() {
+      this.$axios.get("categories").then(res => {
+        this.categories = res.data;
+      });
+    },
+    deleteCategory(id) {
+      this.$axios
+        .delete(`categories/${id}`)
+        .then(res => {
+          this.$message.success("删除成功");
+          this.getCategories();
+        })
+        .catch(err => {
+          this.$message.error(err.response.data);
+        });
+    },
+    updateCategory(id, name) {
+      console.log(id + name);
+      this.$axios
+        .put(`categories/${id}`, { CategoryName: name })
+        .then(res => {
+          this.$message.success("修改成功");
+          this.getCategories();
+        })
+        .catch(err => {
+          this.$message.error(err.response.data);
+        });
+    },
+    updateInput(id) {
+      this.$prompt("请输入分类名", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      })
+        .then(({ value }) => {
+          this.updateCategory(id, value);
+        })
+        .catch(err => {
+          this.$message.warning("取消修改");
+        });
+    },
+    deleteConfirm(id) {
+      this.$confirm("确定要删除?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      })
+        .then(() => {
+          this.deleteCategory(id);
+        })
+        .catch(() => {
+          this.$message.info("已取消删除");
+        });
+    },
+    addCategory() {
+      this.$prompt("请输入分类名", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      })
+        .then(({ value }) => {
+          this.$axios
+            .post("categories", { CategoryName: value })
+            .then(res => {
+              this.$message.success("新增成功");
+              this.getCategories();
+            })
+            .catch(err => {
+              this.$message.error(err.response.data);
+            });
+        })
+        .catch(err => {
+          this.$message.warning("取消修改");
+        });
+    }
   }
 };
 </script>
@@ -116,6 +107,7 @@ export default {
 <style scoped>
 .text {
   font-size: 14px;
+  letter-spacing: 0.5px;
 }
 
 .item {
@@ -136,7 +128,11 @@ export default {
   min-width: 220px;
 }
 
-.el-row {
+.el-row:nth-child(1) {
+  text-align: left;
+}
+
+.el-row:nth-child(2) {
   flex-wrap: wrap;
 }
 </style>
