@@ -11,6 +11,8 @@ import { RadioButton } from 'element-ui'
 import { Row } from 'element-ui'
 import { Col } from 'element-ui'
 import { Card } from 'element-ui'
+import { Message } from 'element-ui'
+import { MessageBox } from 'element-ui'
 
 Vue.use(Button)
 Vue.use(Container)
@@ -24,3 +26,7 @@ Vue.use(RadioButton)
 Vue.use(Row)
 Vue.use(Col)
 Vue.use(Card)
+
+Vue.prototype.$message = Message
+Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$prompt = MessageBox.prompt
