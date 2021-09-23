@@ -3,8 +3,17 @@ import App from './App.vue'
 import router from './router'
 import './plugins/element.js'
 import './assets/layout.css'
+import Axios from 'axios'
 
-Vue.config.productionTip = false
+
+let config = {
+  baseURL: "https://localhost:8011/api/"
+}
+
+const axios = Axios.create(config)
+
+Vue.prototype.$axios = axios;
+Vue.config.productionTip = false;
 
 new Vue({
   router,
