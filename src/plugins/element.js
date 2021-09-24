@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Button } from 'element-ui'
+import { Button, Checkbox } from 'element-ui'
 import { Container } from 'element-ui'
 import { Main } from 'element-ui'
 import { Aside } from 'element-ui'
@@ -13,6 +13,8 @@ import { Col } from 'element-ui'
 import { Card } from 'element-ui'
 import { Message } from 'element-ui'
 import { MessageBox } from 'element-ui'
+import { CheckboxGroup } from 'element-ui'
+import { Input } from 'element-ui'
 
 Vue.use(Button)
 Vue.use(Container)
@@ -26,6 +28,9 @@ Vue.use(RadioButton)
 Vue.use(Row)
 Vue.use(Col)
 Vue.use(Card)
+Vue.use(Checkbox)
+Vue.use(CheckboxGroup)
+Vue.use(Input)
 
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
