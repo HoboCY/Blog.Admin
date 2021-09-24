@@ -6,7 +6,7 @@
     <el-row type="flex" align="top">
       <el-card v-for="category in categories" :key="category.id" class="box-card">
         <div class="text item">{{ category.categoryName }}</div>
-        <div class="btn-group">
+        <div>
           <el-button type="text" class="button" @click="updateInput(category.id)">修改</el-button>
           <el-button type="text" class="button" @click="deleteConfirm(category.id)">删除</el-button>
         </div>
@@ -27,9 +27,14 @@ export default {
   },
   methods: {
     getCategories() {
-      this.$axios.get("categories").then(res => {
-        this.categories = res.data;
-      });
+      this.$axios
+        .get("categories")
+        .then(res => {
+          this.categories = res.data;
+        })
+        .catch(err => {
+          this.$message.error("获取分类信息出错");
+        });
     },
     deleteCategory(id) {
       this.$axios
@@ -134,5 +139,6 @@ export default {
 
 .el-row:nth-child(2) {
   flex-wrap: wrap;
+  text-align: center;
 }
 </style>
