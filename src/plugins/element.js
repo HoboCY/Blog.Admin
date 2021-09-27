@@ -1,20 +1,8 @@
 import Vue from 'vue'
-import { Button, Checkbox } from 'element-ui'
-import { Container } from 'element-ui'
-import { Main } from 'element-ui'
-import { Aside } from 'element-ui'
-import { Header } from 'element-ui'
-import { Menu } from 'element-ui'
-import { MenuItem } from 'element-ui'
-import { RadioGroup } from 'element-ui'
-import { RadioButton } from 'element-ui'
-import { Row } from 'element-ui'
-import { Col } from 'element-ui'
-import { Card } from 'element-ui'
-import { Message } from 'element-ui'
-import { MessageBox } from 'element-ui'
-import { CheckboxGroup } from 'element-ui'
-import { Input } from 'element-ui'
+import {
+    Button, Checkbox, Container, Main, Aside, Header, Menu, MenuItem, Submenu, RadioGroup,
+    RadioButton, Row, Col, Card, Message, MessageBox, CheckboxGroup, Input, Form, FormItem, Table, TableColumn, Tabs, TabPane
+} from 'element-ui'
 
 Vue.use(Button)
 Vue.use(Container)
@@ -23,6 +11,7 @@ Vue.use(Aside)
 Vue.use(Header)
 Vue.use(Menu)
 Vue.use(MenuItem)
+Vue.use(Submenu)
 Vue.use(RadioGroup)
 Vue.use(RadioButton)
 Vue.use(Row)
@@ -31,6 +20,12 @@ Vue.use(Card)
 Vue.use(Checkbox)
 Vue.use(CheckboxGroup)
 Vue.use(Input)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Tabs)
+Vue.use(TabPane)
 
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
