@@ -2,7 +2,7 @@
   <el-container>
     <el-aside width="200px">
       <el-menu
-        default-active="/post"
+        default-active="/postlist"
         class="el-menu-vertical-demo"
         @open="handleOpen"
         @close="handleClose"
