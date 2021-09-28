@@ -1,8 +1,8 @@
 <template>
   <el-tabs v-model="activeName" @tab-click="handleClick">
-    <el-tab-pane label="false" name="first">已发布</el-tab-pane>
-    <el-tab-pane label="true" name="second">回收站</el-tab-pane>
-    <PostList :posts="posts"></PostList>
+    <el-tab-pane label="已发布" name="false"></el-tab-pane>
+    <el-tab-pane label="回收站" name="true"></el-tab-pane>
+    <PostList :isDeleted="activeName"></PostList>
   </el-tabs>
 </template>
 <script>
@@ -14,20 +14,11 @@ export default {
   },
   data() {
     return {
-      activeName: "second",
-      isDeleted: 0,
-      posts: []
+      activeName: "false"
     };
   },
   methods: {
-    handleClick(tab) {
-      console.log(tab.label);
-      this.isDeleted = tab.label;
-      this.$axios.get(`posts?isDeleted=${this.isDeleted}`).then(res => {
-        console.log(res.data);
-        this.posts = res.data;
-      });
-    }
+    handleClick(tab) {}
   }
 };
 </script>
