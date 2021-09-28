@@ -4,7 +4,7 @@ import Home from '../components/Home.vue'
 import Category from '../views/Category/Category.vue'
 import Post from '../views/Post/Post.vue'
 import MyPosts from '../views/Post/MyPosts.vue'
-import Login from '../components/Login.vue'
+import Login from '../views/Login/Login.vue'
 
 Vue.use(VueRouter)
 
