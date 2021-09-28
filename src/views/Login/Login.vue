@@ -95,7 +95,7 @@ export default {
       this.$axios
         .post("users/login", { Email: this.loginModel.email, Password: this.loginModel.password })
         .then(res => {
-          window.localStorage.setItem("token", res.data.token);
+          localStorage.setItem("token", res.data.token);
           this.$message.success("登陆成功");
           this.$router.push("/post");
         })
