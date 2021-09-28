@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { Message } from 'element-ui'
+import router from '../router/index.js'
 
 // 3. 配置信息
 let config = {
@@ -13,6 +15,20 @@ let config = {
 }
 
 const instance = axios.create(config)
+
+instance.interceptors.response.use(response => {
+
+}, error => {
+    if (error.response.status) {
+        switch (error.response.status) {
+            case 401:
+                localStorage.removeItem("token");
+                Message.error("未授权，请重新登录");
+                router.push("/");
+                break;
+        }
+    }
+})
 
 // 4. 导出
 export default instance
