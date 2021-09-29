@@ -97,7 +97,7 @@ export default {
         .then(res => {
           localStorage.setItem("token", res.data.token);
           this.$message.success("登陆成功");
-          this.$router.push("/post");
+          this.$router.push({ name: "PostList" });
         })
         .catch(err => {
           this.$message.error(err.response.data);

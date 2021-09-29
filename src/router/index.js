@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../components/Home.vue'
-import Category from '../views/Category/Category.vue'
-import Post from '../views/Post/Post.vue'
-import MyPosts from '../views/Post/MyPosts.vue'
+import Home from '../views/Home.vue'
+import CategoryList from '../views/Category/CategoryList.vue'
+import EditPost from '../views/Post/EditPost.vue'
+import PostList from '../views/Post/PostList.vue'
 import Login from '../views/Login/Login.vue'
+import UserList from '../views/User/UserList.vue'
 
 Vue.use(VueRouter)
 
@@ -14,20 +15,26 @@ const routes = [
     name: 'Home',
     component: Home,
     children: [{
-      path: '/category',
-      name: 'Category',
-      component: Category
+      path: '/Category/List',
+      name: 'CategoryList',
+      component: CategoryList
     },
     {
-      path: '/post',
-      name: 'Post',
-      component: Post
+      path: '/Post/Edit',
+      name: 'EditPost',
+      component: EditPost
     },
     {
-      path: '/postlist',
-      name: 'MyPosts',
-      component: MyPosts
-    }]
+      path: '/Post/List',
+      name: 'PostList',
+      component: PostList
+    },
+    {
+      path: '/User/List',
+      name: 'UserList',
+      component: UserList
+    }
+    ]
   },
   {
     path: '/',

@@ -1,23 +1,22 @@
 <template>
   <el-container>
     <el-main>
-      <el-input v-model="title" placeholder="请输入标题"></el-input>
+      <el-input v-model="title" placeholder="请输入标题" @input="titleInput"></el-input>
       <div id="vditor"></div>
-      <el-button type="success" @click="addPost">保存</el-button>
+      <el-button type="success" @click="addOrEditPost" :disabled="disabled">保存</el-button>
     </el-main>
     <el-aside>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>分类</span>
         </div>
-        <el-checkbox-group :min="1" v-model="categoryIds">
+        <el-checkbox-group :min="1" v-model="categoryIds" @change="change">
           <el-checkbox
             size="small"
             v-for="item in categories"
             :key="item.id"
             class="text item"
             :label="item.id"
-            :checked="item.checked"
           >
             {{ item.categoryName }}
           </el-checkbox>
@@ -36,11 +35,18 @@ export default {
       contentVditor: "",
       categories: null,
       categoryIds: [],
-      title: ""
+      title: "",
+      id: "",
+      disabled: true
     };
   },
   mounted() {
     this.getCategories();
+    let id = this.$route.params.id;
+    if (id !== undefined) {
+      this.id = id;
+      this.getPost(id);
+    }
     this.configureEditor();
   },
   methods: {
@@ -55,8 +61,12 @@ export default {
         });
     },
     configureEditor() {
+      let that = this;
       this.contentVditor = new Vditor("vditor", {
         mode: "ir",
+        input(value) {
+          that.disabled = false;
+        },
         toolbarConfig: {
           pin: true
         },
@@ -78,7 +88,7 @@ export default {
       });
       return;
     },
-    addPost() {
+    addOrEditPost() {
       var content = this.contentVditor.getHTML();
       if (this.title <= 0) {
         this.$message.error("请输入标题");
@@ -88,21 +98,58 @@ export default {
         this.$message.error("请输入内容");
         return;
       }
+      if (this.categoryIds.length < 1) {
+        this.$message.error("请选择分类");
+        return;
+      }
+
+      console.log(this.id);
+      if (this.id !== undefined && this.id !== "") {
+        this.editPost(content);
+      } else {
+        this.addPost(content);
+      }
+    },
+    getPost(id) {
+      this.$axios.get(`posts/${id}`).then(res => {
+        this.title = res.data.title;
+        this.contentVditor.insertValue(res.data.content, false);
+        this.categoryIds = res.data.categoryIds;
+      });
+    },
+    addPost(content) {
       this.$axios
         .post("posts", {
-          UserId: "11ec11e4-f8d3-6838-ada7-f4390946988c",
           Title: this.title,
           CategoryIds: this.categoryIds,
           Content: content
         })
         .then(res => {
-          console.log(res);
           this.$message.success("保存成功");
         })
         .catch(err => {
-          console.log(err.response.data);
           this.$message.error("保存失败");
         });
+    },
+    editPost(content) {
+      this.$axios
+        .put(`posts/${this.id}`, {
+          Title: this.title,
+          CategoryIds: this.categoryIds,
+          Content: content
+        })
+        .then(res => {
+          this.$message.success("保存成功");
+        })
+        .catch(err => {
+          this.$message.error("保存失败");
+        });
+    },
+    change(val) {
+      this.disabled = false;
+    },
+    titleInput(val) {
+      this.disabled = false;
     }
   }
 };
