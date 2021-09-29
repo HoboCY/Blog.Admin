@@ -7,28 +7,35 @@ let config = {
     // 每次请求的协议、IP地址。  设置该配置后，每次请求路径都可以使用相对路径，例如"/admin/login"
     baseURL: "https://localhost:8011/api/",
     // 请求超时时间
-    timeout: 10000,
-    // 每次请求携带token,
-    headers: {
-        "Authorization": "Bearer " + localStorage.getItem("token")
-    }
+    timeout: 10000
 }
 
 const instance = axios.create(config)
 
-instance.interceptors.response.use(response => {
-
+instance.interceptors.request.use(config => {
+    const token = "Bearer " + localStorage.getItem("token");
+    token && (config.headers.Authorization = token)
+    return config;
 }, error => {
-    if (error.response.status) {
-        switch (error.response.status) {
-            case 401:
-                localStorage.removeItem("token");
-                Message.error("未授权，请重新登录");
-                router.push("/");
-                break;
-        }
-    }
+    return Promise.error(error);
 })
+
+// instance.interceptors.response.use(response => {
+
+// }, error => {
+//     if (error.response.status) {
+//         var message = "";
+//         switch (error.response.status) {
+//             case 401:
+//                 localStorage.removeItem("token");
+//                 Message.error("未授权，请重新登录");
+//                 router.push("/");
+//                 break;
+//             case 404:
+//                 Message.error()
+//         }
+//     }
+// })
 
 // 4. 导出
 export default instance
