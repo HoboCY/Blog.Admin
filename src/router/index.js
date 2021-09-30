@@ -15,7 +15,7 @@ const routes = [
     name: 'Home',
     component: Home,
     children: [{
-      path: '/Category/List',
+      path: '/Post/Category',
       name: 'CategoryList',
       component: CategoryList
     },
