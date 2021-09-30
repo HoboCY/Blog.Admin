@@ -21,11 +21,11 @@
             <i class="el-icon-tickets"></i>
             <span slot="title">编辑博客</span>
           </el-menu-item>
+          <el-menu-item id="el-menu-item" index="/Post/Category">
+            <i class="el-icon-menu"></i>
+            <span slot="title">分类管理</span>
+          </el-menu-item>
         </el-submenu>
-        <el-menu-item id="el-menu-item" index="/Category/List">
-          <i class="el-icon-menu"></i>
-          <span slot="title">分类管理</span>
-        </el-menu-item>
         <el-menu-item id="el-menu-item" index="/User/List">
           <i class="el-icon-menu"></i>
           <span slot="title">用户管理</span>
@@ -33,7 +33,7 @@
       </el-menu>
     </el-aside>
     <el-container>
-      <el-header class="header"></el-header>
+      <el-header class="header"> </el-header>
       <el-main>
         <router-view></router-view>
       </el-main>
