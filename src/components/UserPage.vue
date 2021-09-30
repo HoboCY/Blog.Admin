@@ -64,13 +64,20 @@ export default {
     this.getUsers();
   },
   methods: {
-    handleSizeChange(pageSize) {},
-    handleCurrentChange(pageIndex) {},
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      this.getUsers();
+    },
+    handleCurrentChange(pageIndex) {
+      this.pageIndex = pageIndex;
+      this.getUsers();
+    },
     confirmChange(row) {
       this.$axios
         .put(`users/${row.id}?confirmed=${row.emailConfirmed}`)
         .then(res => {
           this.$message.success("修改成功");
+          this.getUsers();
         })
         .catch(err => {
           this.$message.error(err.response.data);
@@ -83,7 +90,12 @@ export default {
     },
     getUsers() {
       this.$axios
-        .get("users")
+        .get("users", {
+          params: {
+            pageIndex: this.pageIndex,
+            pageSize: this.pageSize
+          }
+        })
         .then(res => {
           this.total = res.data.total;
           this.users = res.data.items;
