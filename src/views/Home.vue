@@ -26,14 +26,23 @@
             <span slot="title">分类管理</span>
           </el-menu-item>
         </el-submenu>
-        <el-menu-item id="el-menu-item" index="/User/List">
-          <i class="el-icon-menu"></i>
-          <span slot="title">用户管理</span>
-        </el-menu-item>
+        <el-submenu index="/Post/List">
+          <template slot="title">
+            权限管理
+          </template>
+          <el-menu-item id="el-menu-item" index="/User/List">
+            <i class="el-icon-menu"></i>
+            <span slot="title">用户管理</span>
+          </el-menu-item>
+          <el-menu-item id="el-menu-item" index="/Role/List">
+            <i class="el-icon-menu"></i>
+            <span slot="title">角色管理</span>
+          </el-menu-item>
+        </el-submenu>
       </el-menu>
     </el-aside>
     <el-container>
-      <el-header class="header"> </el-header>
+      <el-header class="header"></el-header>
       <el-main>
         <router-view></router-view>
       </el-main>

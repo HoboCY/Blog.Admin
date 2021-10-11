@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import UserPage from "../../components/UserPage.vue";
+import UserPage from '../../components/UserPage.vue';
 
 export default {
   components: {
