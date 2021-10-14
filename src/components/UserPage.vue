@@ -2,8 +2,12 @@
   <el-container>
     <el-table :data="users" style="width: 100%;" border>
       <el-table-column type="index" min-width="5"></el-table-column>
-      <el-table-column prop="username" label="用户名" min-width="15" show-overflow-tooltip>
-      </el-table-column>
+      <el-table-column
+        prop="username"
+        label="用户名"
+        min-width="15"
+        show-overflow-tooltip
+      ></el-table-column>
       <el-table-column
         prop="email"
         show-overflow-tooltip
@@ -43,13 +47,12 @@
       :page-size="pageSize"
       :total="total"
       layout="sizes, prev, pager, next"
-    >
-    </el-pagination>
+    ></el-pagination>
   </el-container>
 </template>
 
 <script>
-import moment from "moment";
+import moment from 'moment';
 
 export default {
   data() {
@@ -75,32 +78,33 @@ export default {
     confirmChange(row) {
       this.$axios
         .put(`users/${row.id}?confirmed=${row.emailConfirmed}`)
-        .then(res => {
-          this.$message.success("修改成功");
+        .then((res) => {
+          this.$message.success('修改成功');
           this.getUsers();
         })
-        .catch(err => {
+        .catch((err) => {
           this.$message.error(err.response.data);
+          this.getUsers();
         });
     },
     formatterTime: function(row, column, cellValue) {
       if (cellValue != null) {
-        return moment(cellValue).format("YYYY-MM-DD HH:mm");
+        return moment(cellValue).format('YYYY-MM-DD HH:mm');
       }
     },
     getUsers() {
       this.$axios
-        .get("users", {
+        .get('users', {
           params: {
             pageIndex: this.pageIndex,
             pageSize: this.pageSize
           }
         })
-        .then(res => {
+        .then((res) => {
           this.total = res.data.total;
           this.users = res.data.items;
         })
-        .catch(err => {
+        .catch((err) => {
           this.$message.error(res.response.data);
         });
     }
