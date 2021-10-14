@@ -26,7 +26,8 @@ import {
   TabPane,
   Pagination,
   Switch,
-  Dialog
+  Dialog,
+  Tree
 } from "element-ui";
 
 Vue.use(Button);
@@ -54,6 +55,7 @@ Vue.use(TabPane);
 Vue.use(Pagination);
 Vue.use(Switch);
 Vue.use(Dialog);
+Vue.use(Tree);
 
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;

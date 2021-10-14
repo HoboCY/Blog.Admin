@@ -38,6 +38,10 @@
             <i class="el-icon-menu"></i>
             <span slot="title">角色管理</span>
           </el-menu-item>
+          <el-menu-item id="el-menu-item" index="/Menu/List">
+            <i class="el-icon-menu"></i>
+            <span slot="title">菜单管理</span>
+          </el-menu-item>
         </el-submenu>
       </el-menu>
     </el-aside>
