@@ -38,6 +38,18 @@
           ></el-switch>
         </template>
       </el-table-column>
+      <el-table-column label="操作" min-width="15">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="success"
+            icon="el-icon-setting"
+            @click="showDialog(scope.row)"
+          >
+            分配角色
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination
       @size-change="handleSizeChange"
@@ -48,11 +60,37 @@
       :total="total"
       layout="sizes, prev, pager, next"
     ></el-pagination>
+    <el-dialog title="分配角色" :visible.sync="dialogFormVisible">
+      <el-form>
+        <el-checkbox
+          :indeterminate="isIndeterminate"
+          v-model="checkAll"
+          @change="handleCheckAllChange"
+        >
+          全选
+        </el-checkbox>
+        <div style="margin: 15px 0;"></div>
+        <el-checkbox-group
+          v-model="checkedRoleIds"
+          @change="handleCheckedRolesChange"
+        >
+          <el-checkbox v-for="item in roles" :label="item.id" :key="item.id">
+            {{ item.roleName }}
+          </el-checkbox>
+        </el-checkbox-group>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updateUserRoles">
+          确 定
+        </el-button>
+      </div>
+    </el-dialog>
   </el-container>
 </template>
 
 <script>
-import moment from 'moment';
+import moment from "moment";
 
 export default {
   data() {
@@ -60,7 +98,13 @@ export default {
       users: [],
       pageIndex: 1,
       pageSize: 10,
-      total: 0
+      total: 0,
+      dialogFormVisible: false,
+      isIndeterminate: true,
+      checkAll: false,
+      checkedRoleIds: [],
+      roles: [],
+      userId: null
     };
   },
   mounted() {
@@ -79,7 +123,7 @@ export default {
       this.$axios
         .put(`users/${row.id}?confirmed=${row.emailConfirmed}`)
         .then((res) => {
-          this.$message.success('修改成功');
+          this.$message.success("修改成功");
           this.getUsers();
         })
         .catch((err) => {
@@ -89,12 +133,12 @@ export default {
     },
     formatterTime: function(row, column, cellValue) {
       if (cellValue != null) {
-        return moment(cellValue).format('YYYY-MM-DD HH:mm');
+        return moment(cellValue).format("YYYY-MM-DD HH:mm");
       }
     },
     getUsers() {
       this.$axios
-        .get('users', {
+        .get("users", {
           params: {
             pageIndex: this.pageIndex,
             pageSize: this.pageSize
@@ -107,6 +151,60 @@ export default {
         .catch((err) => {
           this.$message.error(res.response.data);
         });
+    },
+    showDialog(row) {
+      let id = row.id;
+      this.userId = id;
+      this.getAllRoles();
+      this.getUserRoles(id);
+      this.dialogFormVisible = true;
+    },
+    getAllRoles() {
+      this.$axios
+        .get("roles")
+        .then((res) => {
+          this.roles = res.data;
+        })
+        .catch((err) => {
+          this.$message.error(err.response.data);
+        });
+    },
+    getUserRoles(id) {
+      this.$axios
+        .get(`users/${id}/roles`)
+        .then((res) => {
+          this.checkedRoleIds = res.data;
+        })
+        .catch((err) => {
+          this.$message.error(err.response.data);
+        });
+    },
+    updateUserRoles() {
+      this.dialogFormVisible = false;
+      this.$axios
+        .post(`users/${this.userId}/roles`, {
+          RoleIds: this.checkedRoleIds
+        })
+        .then((res) => {
+          this.$message.success("用户角色更新成功");
+        })
+        .catch((err) => {
+          this.$message.error(err.response.data);
+        });
+    },
+    handleCheckedRolesChange(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount == this.roles.length;
+      this.isIndeterminate =
+        checkedCount > 0 && checkedCount < this.roles.length;
+    },
+    handleCheckAllChange(val) {
+      this.checkedRoleIds = val
+        ? this.roles.map((r) => {
+            return r.id;
+          })
+        : [];
+      this.isIndeterminate = false;
     }
   }
 };
@@ -119,5 +217,10 @@ export default {
 
 .el-pagination {
   margin-top: 20px;
+}
+
+.el-checkbox {
+  display: block;
+  zoom: 150%;
 }
 </style>

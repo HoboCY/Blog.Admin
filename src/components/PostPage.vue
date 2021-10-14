@@ -2,8 +2,12 @@
   <el-container>
     <el-table :data="posts" style="width: 100%;" border>
       <el-table-column type="index" min-width="5"></el-table-column>
-      <el-table-column prop="title" label="标题" min-width="15" show-overflow-tooltip>
-      </el-table-column>
+      <el-table-column
+        prop="title"
+        label="标题"
+        min-width="15"
+        show-overflow-tooltip
+      ></el-table-column>
       <el-table-column
         prop="contentAbstract"
         show-overflow-tooltip
@@ -39,32 +43,36 @@
             type="primary"
             icon="el-icon-edit"
             @click="edit(scope.row)"
-            >编辑</el-button
           >
+            编辑
+          </el-button>
           <el-button
             v-else
             size="mini"
             type="primary"
             icon="el-icon-refresh-left"
             @click="restore(scope.row)"
-            >恢复</el-button
           >
+            恢复
+          </el-button>
           <el-button
             v-if="isDeleted === 'false'"
             size="mini"
             type="danger"
             icon="el-icon-delete"
             @click="recycle(scope.row)"
-            >回收</el-button
           >
+            回收
+          </el-button>
           <el-button
             v-else
             size="mini"
             type="danger"
             icon="el-icon-delete"
             @click="remove(scope.row)"
-            >删除</el-button
           >
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -76,8 +84,7 @@
       :page-size="pageSize"
       :total="total"
       layout="sizes, prev, pager, next"
-    >
-    </el-pagination>
+    ></el-pagination>
   </el-container>
 </template>
 
@@ -103,16 +110,16 @@ export default {
   },
   methods: {
     edit(row) {
-      this.$router.push({ name: "Post", params: { id: row.id } });
+      this.$router.push({ name: "EditPost", params: { id: row.id } });
     },
     recyclePost(id) {
       this.$axios
         .put(`posts/recycle/${id}`)
-        .then(res => {
+        .then((res) => {
           this.$message.success("操作成功");
           this.getOwnPosts();
         })
-        .catch(err => {
+        .catch((err) => {
           this.$message.error(err.response.data);
         });
     },
@@ -141,11 +148,11 @@ export default {
     restorePost(id) {
       this.$axios
         .put(`posts/restore/${id}`)
-        .then(res => {
+        .then((res) => {
           this.$message.success("恢复成功");
           this.getOwnPosts();
         })
-        .catch(err => {
+        .catch((err) => {
           this.$message.error(err.response.data);
         });
     },
@@ -163,11 +170,11 @@ export default {
     deletePost(id) {
       this.$axios
         .delete(`posts/${id}`)
-        .then(res => {
+        .then((res) => {
           this.$message.success("删除成功");
           this.getOwnPosts();
         })
-        .catch(err => {
+        .catch((err) => {
           this.$message.error(err.response.data);
         });
     },
@@ -204,11 +211,11 @@ export default {
             pageSize: this.pageSize
           }
         })
-        .then(res => {
+        .then((res) => {
           this.total = res.data.total;
           this.posts = res.data.items;
         })
-        .catch(err => {
+        .catch((err) => {
           this.$message.error(err.response.data);
         });
     },

@@ -36,38 +36,36 @@
         </template>
       </el-table-column>
     </el-table>
-    <div>
-      <el-dialog title="分配权限" :visible.sync="dialogFormVisible">
-        <el-form>
+    <el-dialog title="分配权限" :visible.sync="dialogFormVisible">
+      <el-form>
+        <el-checkbox
+          :indeterminate="isIndeterminate"
+          v-model="checkAll"
+          @change="handleCheckAllChange"
+        >
+          全选
+        </el-checkbox>
+        <div style="margin: 15px 0;"></div>
+        <el-checkbox-group
+          v-model="checkedPermissions"
+          @change="handleCheckedPermissionsChange"
+        >
           <el-checkbox
-            :indeterminate="isIndeterminate"
-            v-model="checkAll"
-            @change="handleCheckAllChange"
+            v-for="permission in permissions"
+            :label="permission"
+            :key="permission"
           >
-            全选
+            {{ permission }}
           </el-checkbox>
-          <div style="margin: 15px 0;"></div>
-          <el-checkbox-group
-            v-model="checkedPermissions"
-            @change="handleCheckedPermissionsChange"
-          >
-            <el-checkbox
-              v-for="permission in permissions"
-              :label="permission"
-              :key="permission"
-            >
-              {{ permission }}
-            </el-checkbox>
-          </el-checkbox-group>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="updatePermissions">
-            确 定
-          </el-button>
-        </div>
-      </el-dialog>
-    </div>
+        </el-checkbox-group>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updatePermissions">
+          确 定
+        </el-button>
+      </div>
+    </el-dialog>
   </el-container>
 </template>
 
