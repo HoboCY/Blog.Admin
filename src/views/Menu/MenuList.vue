@@ -8,6 +8,15 @@
     >
       新增
     </el-button>
+    <el-button
+      @click="update"
+      type="primary"
+      size="medium"
+      icon="el-icon-edit"
+      style="margin-left:15px;"
+    >
+      编辑
+    </el-button>
     <el-tree
       :data="menus"
       :props="defaultProps"
@@ -30,7 +39,7 @@
             type="text"
             size="mini"
             icon="el-icon-minus"
-            @click="() => remove(node, data)"
+            @click="() => remove(data)"
           ></el-button>
         </span>
       </span>
@@ -46,7 +55,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button @click="cancel">取 消</el-button>
         <el-button type="primary" @click="appendMenu">
           确 定
         </el-button>
@@ -71,7 +80,8 @@ export default {
         parentId: null,
         level: null
       },
-      currentNode: null
+      currentNode: null,
+      isUpdate: false
     };
   },
   methods: {
@@ -82,7 +92,7 @@ export default {
           this.menus = res.data;
         })
         .catch((err) => {
-          console.log(err);
+          this.$message.error(err.response.data);
         });
     },
     showAppendDialog(data) {
@@ -90,7 +100,10 @@ export default {
       this.dialogFormVisible = true;
     },
     appendMenu() {
-      console.log(this.currentNode);
+      if (this.isUpdate) {
+        this.updateMenu(this.currentNode.id);
+        return;
+      }
       if (this.currentNode === null) {
         this.appendMenuForm.parentId = null;
         this.appendMenuForm.level = 1;
@@ -98,7 +111,6 @@ export default {
         this.appendMenuForm.parentId = this.currentNode.id;
         this.appendMenuForm.level = this.currentNode.level + 1;
       }
-
       this.$axios
         .post("menus", this.appendMenuForm)
         .then((res) => {
@@ -111,6 +123,55 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    remove(data) {
+      this.$confirm("当前节点的所有子节点也会删除，确定要删除吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      }).then(() => {
+        this.$axios
+          .delete(`menus/${data.id}`)
+          .then((res) => {
+            this.$refs.tree.remove(data);
+            this.$message.success("删除成功");
+          })
+          .catch((err) => {
+            this.$message.error("删除失败");
+          });
+      });
+    },
+    update() {
+      var currentNode = this.$refs.tree.getCurrentNode();
+      if (currentNode === null) {
+        this.$message.warning("请先选择要编辑的节点");
+        return;
+      }
+      this.isUpdate = true;
+      this.appendMenuForm.text = currentNode.text;
+      this.appendMenuForm.url = currentNode.url;
+      this.appendMenuForm.parentId = currentNode.parentId;
+      this.appendMenuForm.level = currentNode.level;
+      this.showAppendDialog(currentNode);
+      this.dialogFormVisible = true;
+    },
+    updateMenu(id) {
+      this.$axios
+        .put(`menus/${id}`, this.appendMenuForm)
+        .then((res) => {
+          this.$message.success("修改成功");
+          this.dialogFormVisible = false;
+          this.$refs.appendMenuForm.resetFields();
+          this.isUpdate = false;
+          this.currentNode = null;
+          this.getMenus();
+        })
+        .catch((err) => {
+          this.$message.error(err.response.data);
+        });
+    },
+    cancel() {
+      this.dialogFormVisible = false;
+      this.$refs.appendMenuForm.resetFields();
     }
   },
   mounted() {
