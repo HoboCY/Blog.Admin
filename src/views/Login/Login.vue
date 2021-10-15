@@ -31,8 +31,9 @@
             type="primary"
             native-type="submit"
             block
-            >Login</el-button
           >
+            Login
+          </el-button>
         </el-form-item>
         <!-- <a class="forgot-password" href="https://oxfordinformatics.com/">Forgot password ?</a> -->
       </el-form>
@@ -81,7 +82,7 @@ export default {
   },
   methods: {
     simulateLogin() {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         setTimeout(resolve, 800);
       });
     },
@@ -93,13 +94,17 @@ export default {
       this.loading = true;
       await this.simulateLogin();
       this.$axios
-        .post("users/login", { Email: this.loginModel.email, Password: this.loginModel.password })
-        .then(res => {
+        .post("users/login", {
+          Email: this.loginModel.email,
+          Password: this.loginModel.password
+        })
+        .then((res) => {
           localStorage.setItem("token", res.data.token);
           this.$message.success("登陆成功");
-          this.$router.push({ name: "PostList" });
+          console.log("即将跳转");
+          this.$router.push({ name: "Home" });
         })
-        .catch(err => {
+        .catch((err) => {
           this.$message.error(err.response.data);
         });
       this.loading = false;

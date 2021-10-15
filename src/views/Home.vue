@@ -2,7 +2,6 @@
   <el-container>
     <el-aside width="200px">
       <el-menu
-        default-active="/Post/List"
         class="el-menu-vertical-demo"
         @open="handleOpen"
         @close="handleClose"
@@ -11,36 +10,14 @@
         active-text-color="#ffcc00"
         :router="true"
       >
-        <el-submenu index="/Post/List">
-          <template slot="title">博客管理</template>
-          <el-menu-item index="/Post/List">
-            <i class="el-icon-tickets"></i>
-            <span slot="title">我的博客</span>
-          </el-menu-item>
-          <el-menu-item index="/Post/Edit">
-            <i class="el-icon-tickets"></i>
-            <span slot="title">编辑博客</span>
-          </el-menu-item>
-          <el-menu-item id="el-menu-item" index="/Post/Category">
-            <i class="el-icon-menu"></i>
-            <span slot="title">分类管理</span>
-          </el-menu-item>
-        </el-submenu>
-        <el-submenu index="/Post/List">
-          <template slot="title">
-            权限管理
-          </template>
-          <el-menu-item id="el-menu-item" index="/User/List">
-            <i class="el-icon-menu"></i>
-            <span slot="title">用户管理</span>
-          </el-menu-item>
-          <el-menu-item id="el-menu-item" index="/Role/List">
-            <i class="el-icon-menu"></i>
-            <span slot="title">角色管理</span>
-          </el-menu-item>
-          <el-menu-item id="el-menu-item" index="/Menu/List">
-            <i class="el-icon-menu"></i>
-            <span slot="title">菜单管理</span>
+        <el-submenu v-for="menu in menus" :index="menu.url" :key="menu.id">
+          <template slot="title">{{ menu.text }}</template>
+          <el-menu-item
+            v-for="child in menu.children"
+            :key="child.id"
+            :index="child.url"
+          >
+            <span slot="title">{{ child.text }}</span>
           </el-menu-item>
         </el-submenu>
       </el-menu>
@@ -58,12 +35,26 @@
 export default {
   data() {
     return {
-      isCollapse: true
+      isCollapse: true,
+      menus: []
     };
+  },
+  mounted() {
+    this.getUserMenus();
   },
   methods: {
     handleOpen(key, keyPath) {},
-    handleClose(key, keyPath) {}
+    handleClose(key, keyPath) {},
+    getUserMenus() {
+      this.$axios
+        .get("users/menus")
+        .then((res) => {
+          this.menus = res.data;
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+        });
+    }
   }
 };
 </script>

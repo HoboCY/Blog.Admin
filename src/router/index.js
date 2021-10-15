@@ -1,63 +1,86 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-import CategoryList from "../views/Category/CategoryList.vue";
-import EditPost from "../views/Post/EditPost.vue";
-import PostList from "../views/Post/PostList.vue";
-import Login from "../views/Login/Login.vue";
-import UserList from "../views/User/UserList.vue";
-import RoleList from "../views/Role/RoleList.vue";
-import MenuList from "../views/Menu/MenuList.vue";
 
 Vue.use(VueRouter);
 
-const routes = [
+const commonRoutes = [
   {
-    path: "/home",
+    path: "/login",
+    name: "Login",
+    component: () => import("../views/Login/Login")
+  },
+  {
+    path: "/",
     name: "Home",
+    component: () => import("../views/Home")
+  },
+  {
+    path: "/404",
+    name: "404",
+    component: () => import("../views/error-pages/404")
+  }
+];
+
+export const asyncRoutes = [
+  {
+    path: "/PostManage",
+    name: "PostManage",
     component: Home,
+    redirect: { name: "PostList" },
     children: [
       {
         path: "/Post/Category",
         name: "CategoryList",
-        component: CategoryList
+        component: () => import("../views/Category/CategoryList")
       },
       {
         path: "/Post/Edit",
         name: "EditPost",
-        component: EditPost
+        component: () => import("../views/Post/EditPost")
       },
       {
         path: "/Post/List",
         name: "PostList",
-        component: PostList
-      },
-      {
-        path: "/User/List",
-        name: "UserList",
-        component: UserList
-      },
-      {
-        path: "/Role/List",
-        name: "RoleList",
-        component: RoleList
-      },
-      {
-        path: "/Menu/List",
-        component: MenuList
+        component: () => import("../views/Post/PostList")
       }
     ]
   },
   {
-    path: "/",
-    name: "Login",
-    component: Login
+    path: "/PermissionManage",
+    name: "PermissionManage",
+    component: Home,
+    redirect: { name: "UserList" },
+    children: [
+      {
+        path: "/User/List",
+        name: "UserList",
+        component: () => import("../views/User/UserList")
+      },
+      {
+        path: "/Role/List",
+        name: "RoleList",
+        component: () => import("../views/Role/RoleList")
+      },
+      {
+        path: "/Menu/List",
+        component: () => import("../views/Menu/MenuList")
+      }
+    ]
   }
 ];
 
-const router = new VueRouter({
-  routes,
-  mode: "history"
-});
+const createRouter = () =>
+  new VueRouter({
+    routes: commonRoutes,
+    mode: "history"
+  });
+
+const router = createRouter();
+
+export function resetRouter() {
+  const newRouter = createRouter();
+  router.matcher = newRouter.matcher;
+}
 
 export default router;
