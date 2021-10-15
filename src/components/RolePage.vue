@@ -31,12 +31,25 @@
             icon="el-icon-setting"
             @click="showDialog(scope.row)"
           >
-            权限
+            接口权限
+          </el-button>
+          <el-button
+            size="mini"
+            type="success"
+            icon="el-icon-setting"
+            @click="showMenusDialog(scope.row)"
+          >
+            菜单权限
           </el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="分配权限" :visible.sync="dialogFormVisible">
+
+    <el-dialog
+      title="分配接口权限"
+      :visible.sync="dialogFormVisible"
+      width="30%"
+    >
       <el-form>
         <el-checkbox
           :indeterminate="isIndeterminate"
@@ -66,6 +79,28 @@
         </el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="分配菜单权限"
+      :visible.sync="dialogTreeVisible"
+      width="30%"
+    >
+      <el-tree
+        :data="menus"
+        show-checkbox
+        node-key="id"
+        :props="defaultProps"
+        :default-expanded-keys="defaultExpandedKeys"
+        :default-checked-keys="defaultCheckedKeys"
+        ref="menuTree"
+      ></el-tree>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogTreeVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updateRoleMenus">
+          确 定
+        </el-button>
+      </div>
+    </el-dialog>
   </el-container>
 </template>
 
@@ -77,11 +112,19 @@ export default {
     return {
       roles: [],
       dialogFormVisible: false,
+      dialogTreeVisible: false,
       isIndeterminate: true,
       checkAll: false,
       checkedPermissions: [],
       permissions: null,
-      roleId: null
+      roleId: null,
+      menus: [],
+      defaultProps: {
+        children: "children",
+        label: "text"
+      },
+      defaultExpandedKeys: [],
+      defaultCheckedKeys: []
     };
   },
   mounted() {
@@ -175,6 +218,54 @@ export default {
     handleCheckAllChange(val) {
       this.checkedPermissions = val ? this.permissions : [];
       this.isIndeterminate = false;
+    },
+    getAllMenus() {
+      this.$axios
+        .get("menus")
+        .then((res) => {
+          this.menus = res.data;
+          this.defaultExpandedKeys = this.menus.map((r) => {
+            return r.id;
+          });
+        })
+        .catch((err) => {
+          this.$message.error(err.response.data);
+        });
+    },
+    getRoleMenus(id) {
+      this.$axios
+        .get(`roles/${id}/menus`)
+        .then((res) => {
+          let userMenus = res.data;
+          this.defaultCheckedKeys = userMenus.map((r) => {
+            return r.id;
+          });
+        })
+        .catch((err) => {});
+    },
+    showMenusDialog(row) {
+      this.roleId = row.id;
+      this.getAllMenus();
+      this.getRoleMenus(this.roleId);
+      this.dialogTreeVisible = true;
+    },
+    updateRoleMenus() {
+      let checkedKeys = this.$refs.menuTree.getCheckedKeys();
+      if (checkedKeys.length < 1) {
+        this.$message.warning("选项不可为空");
+        return;
+      }
+      this.$axios
+        .post(`roles/${this.roleId}/menus`, {
+          MenuIds: checkedKeys
+        })
+        .then((res) => {
+          this.$message.success("修改成功");
+          this.dialogTreeVisible = false;
+        })
+        .catch((err) => {
+          this.$message.error(err.response.data);
+        });
     }
   }
 };
@@ -191,6 +282,10 @@ export default {
 
 .el-checkbox {
   display: block;
+  zoom: 150%;
+}
+
+.el-tree {
   zoom: 150%;
 }
 </style>
