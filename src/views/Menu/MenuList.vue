@@ -22,7 +22,6 @@
       :props="defaultProps"
       check-on-click-node
       node-key="id"
-      accordion
       ref="tree"
       highlight-current
     >

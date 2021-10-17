@@ -12,25 +12,22 @@ Vue.config.productionTip = false;
 
 let hasMenus = false;
 
-router.beforeResolve((to, from, next) => {
+router.beforeResolve(async (to, from, next) => {
   var isAuthenticated = localStorage.getItem("token") !== null;
   if (to.name !== "Login" && !isAuthenticated) {
     next({ name: "Login" });
-  }
-  if (to.name === "Home") {
-    if (hasMenus) next;
+  } else if (to.name === "PostList" && from.name === "Login") {
+    if (hasMenus) next();
     else {
-      console.log("创建菜单");
       let menus = [];
-      Axios.get("users/menus").then((res) => {
+      await Axios.get("users/menus").then((res) => {
         menus = res.data;
       });
       const routes = createRoutes(menus);
-      console.log(routes);
       router.addRoutes(routes);
       hasMenus = true;
+      next({ name: "PostManage" });
     }
-    next();
   } else next();
 });
 

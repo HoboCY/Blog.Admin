@@ -11,19 +11,6 @@ const commonRoutes = [
     component: () => import("../views/Login/Login")
   },
   {
-    path: "/",
-    name: "Home",
-    component: () => import("../views/Home")
-  },
-  {
-    path: "/404",
-    name: "404",
-    component: () => import("../views/error-pages/404")
-  }
-];
-
-export const asyncRoutes = [
-  {
     path: "/PostManage",
     name: "PostManage",
     component: Home,
@@ -47,6 +34,14 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: "/404",
+    name: "404",
+    component: () => import("../views/error-pages/404")
+  }
+];
+
+export const asyncRoutes = [
+  {
     path: "/PermissionManage",
     name: "PermissionManage",
     component: Home,
@@ -64,6 +59,7 @@ export const asyncRoutes = [
       },
       {
         path: "/Menu/List",
+        name: "MenuList",
         component: () => import("../views/Menu/MenuList")
       }
     ]

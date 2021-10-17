@@ -101,8 +101,7 @@ export default {
         .then((res) => {
           localStorage.setItem("token", res.data.token);
           this.$message.success("登陆成功");
-          console.log("即将跳转");
-          this.$router.push({ name: "Home" });
+          this.$router.push({ name: "PostManage" });
         })
         .catch((err) => {
           this.$message.error(err.response.data);
