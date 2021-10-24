@@ -251,13 +251,16 @@ export default {
     },
     updateRoleMenus() {
       let checkedKeys = this.$refs.menuTree.getCheckedKeys();
-      if (checkedKeys.length < 1) {
+      let halfCheckedKeys = this.$refs.menuTree.getHalfCheckedKeys();
+      let allCheckedKeys = halfCheckedKeys.concat(checkedKeys);
+
+      if (allCheckedKeys.length < 1) {
         this.$message.warning("选项不可为空");
         return;
       }
       this.$axios
         .post(`roles/${this.roleId}/menus`, {
-          MenuIds: checkedKeys
+          MenuIds: allCheckedKeys
         })
         .then((res) => {
           this.$message.success("修改成功");
