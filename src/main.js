@@ -12,12 +12,12 @@ Vue.config.productionTip = false;
 
 let hasMenus = false;
 
-router.beforeResolve(async (to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   var isAuthenticated = localStorage.getItem("token") !== null;
   if (to.name !== "Login" && !isAuthenticated) {
-    next({ name: "Login" });
+    return next({ name: "Login" });
   } else if (to.name === "PostList" && from.name === "Login") {
-    if (hasMenus) next();
+    if (hasMenus) return next();
     else {
       let menus = [];
       await Axios.get("users/menus").then((res) => {
@@ -26,9 +26,9 @@ router.beforeResolve(async (to, from, next) => {
       const routes = createRoutes(menus);
       router.addRoutes(routes);
       hasMenus = true;
-      next({ name: "PostManage" });
+      return next({ name: "PostList" });
     }
-  } else next();
+  } else return next();
 });
 
 new Vue({
