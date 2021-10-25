@@ -14,8 +14,12 @@ let hasMenus = false;
 
 router.beforeEach(async (to, from, next) => {
   var isAuthenticated = localStorage.getItem("token") !== null;
-  if (to.name !== "Login" && !isAuthenticated) {
-    return next({ name: "Login" });
+  if (!isAuthenticated) {
+    if (to.name === "Login") {
+      next();
+      return;
+    }
+    next({ name: "Login" });
   } else if (to.name === "PostList" && from.name === "Login") {
     if (hasMenus) return next();
     else {

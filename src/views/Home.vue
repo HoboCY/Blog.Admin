@@ -23,7 +23,9 @@
       </el-menu>
     </el-aside>
     <el-container>
-      <el-header class="header"></el-header>
+      <el-header class="header">
+        <Profile></Profile>
+      </el-header>
       <el-main>
         <router-view></router-view>
       </el-main>
@@ -32,7 +34,12 @@
 </template>
 
 <script>
+import Profile from "../components/Profile.vue";
+
 export default {
+  components: {
+    Profile
+  },
   data() {
     return {
       isCollapse: true,

@@ -27,7 +27,10 @@ import {
   Pagination,
   Switch,
   Dialog,
-  Tree
+  Tree,
+  DropdownMenu,
+  Dropdown,
+  DropdownItem
 } from "element-ui";
 
 Vue.use(Button);
@@ -56,6 +59,9 @@ Vue.use(Pagination);
 Vue.use(Switch);
 Vue.use(Dialog);
 Vue.use(Tree);
+Vue.use(DropdownMenu);
+Vue.use(DropdownItem);
+Vue.use(Dropdown);
 
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;
