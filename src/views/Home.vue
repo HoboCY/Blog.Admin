@@ -70,6 +70,7 @@ export default {
 .el-header {
   background-color: #f7f7f7;
   opacity: 0.5;
+  text-align: center;
 }
 
 #el-menu-item:hover {
