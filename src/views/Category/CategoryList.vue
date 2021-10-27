@@ -1,13 +1,25 @@
 <template>
   <div>
     <el-row>
-      <el-button type="success" class="button" @click="addCategory">新增</el-button>
+      <el-button type="success" class="button" @click="addCategory">
+        新增
+      </el-button>
     </el-row>
     <el-row type="flex" align="top">
-      <el-card v-for="category in categories" :key="category.id" class="box-card">
+      <el-card
+        v-for="category in categories"
+        :key="category.id"
+        class="box-card"
+      >
         <div class="text item">{{ category.categoryName }}</div>
         <div>
-          <el-button type="text" class="button" @click="updateInput(category.id)">修改</el-button>
+          <el-button
+            type="text"
+            class="button"
+            @click="updateInput(category.id)"
+          >
+            修改
+          </el-button>
         </div>
       </el-card>
     </el-row>
@@ -26,25 +38,17 @@ export default {
   },
   methods: {
     getCategories() {
-      this.$axios
-        .get("categories")
-        .then(res => {
-          this.categories = res.data;
-        })
-        .catch(err => {
-          this.$message.error("获取分类信息出错");
-        });
+      this.$axios.get("categories").then((res) => {
+        this.categories = res.data;
+      });
     },
     updateCategory(id, name) {
       console.log(id + name);
       this.$axios
         .put(`categories/${id}`, { CategoryName: name })
-        .then(res => {
+        .then((res) => {
           this.$message.success("修改成功");
           this.getCategories();
-        })
-        .catch(err => {
-          this.$message.error(err.response.data);
         });
     },
     updateInput(id) {
@@ -55,7 +59,7 @@ export default {
         .then(({ value }) => {
           this.updateCategory(id, value);
         })
-        .catch(err => {
+        .catch((err) => {
           this.$message.warning("取消修改");
         });
     },
@@ -67,15 +71,12 @@ export default {
         .then(({ value }) => {
           this.$axios
             .post("categories", { CategoryName: value })
-            .then(res => {
+            .then((res) => {
               this.$message.success("新增成功");
               this.getCategories();
-            })
-            .catch(err => {
-              this.$message.error(err.response.data);
             });
         })
-        .catch(err => {
+        .catch((err) => {
           this.$message.warning("取消修改");
         });
     }

@@ -85,14 +85,9 @@ export default {
   },
   methods: {
     getMenus() {
-      this.$axios
-        .get("menus")
-        .then((res) => {
-          this.menus = res.data;
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data);
-        });
+      this.$axios.get("menus").then((res) => {
+        this.menus = res.data;
+      });
     },
     showAppendDialog(data) {
       this.currentNode = data;
@@ -110,33 +105,23 @@ export default {
         this.appendMenuForm.parentId = this.currentNode.id;
         this.appendMenuForm.level = this.currentNode.level + 1;
       }
-      this.$axios
-        .post("menus", this.appendMenuForm)
-        .then((res) => {
-          this.$message.success("添加成功");
-          this.dialogFormVisible = false;
-          this.$refs.tree.append(res.data, this.currentNode);
-          this.$refs.appendMenuForm.resetFields();
-          this.currentNode = null;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.$axios.post("menus", this.appendMenuForm).then((res) => {
+        this.$message.success("添加成功");
+        this.dialogFormVisible = false;
+        this.$refs.tree.append(res.data, this.currentNode);
+        this.$refs.appendMenuForm.resetFields();
+        this.currentNode = null;
+      });
     },
     remove(data) {
       this.$confirm("当前节点的所有子节点也会删除，确定要删除吗？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消"
       }).then(() => {
-        this.$axios
-          .delete(`menus/${data.id}`)
-          .then((res) => {
-            this.$refs.tree.remove(data);
-            this.$message.success("删除成功");
-          })
-          .catch((err) => {
-            this.$message.error("删除失败");
-          });
+        this.$axios.delete(`menus/${data.id}`).then((res) => {
+          this.$refs.tree.remove(data);
+          this.$message.success("删除成功");
+        });
       });
     },
     update() {
@@ -154,19 +139,14 @@ export default {
       this.dialogFormVisible = true;
     },
     updateMenu(id) {
-      this.$axios
-        .put(`menus/${id}`, this.appendMenuForm)
-        .then((res) => {
-          this.$message.success("修改成功");
-          this.dialogFormVisible = false;
-          this.$refs.appendMenuForm.resetFields();
-          this.isUpdate = false;
-          this.currentNode = null;
-          this.getMenus();
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data);
-        });
+      this.$axios.put(`menus/${id}`, this.appendMenuForm).then((res) => {
+        this.$message.success("修改成功");
+        this.dialogFormVisible = false;
+        this.$refs.appendMenuForm.resetFields();
+        this.isUpdate = false;
+        this.currentNode = null;
+        this.getMenus();
+      });
     },
     cancel() {
       this.dialogFormVisible = false;

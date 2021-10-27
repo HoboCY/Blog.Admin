@@ -53,14 +53,9 @@ export default {
     handleOpen(key, keyPath) {},
     handleClose(key, keyPath) {},
     getUserMenus() {
-      this.$axios
-        .get("users/menus")
-        .then((res) => {
-          this.menus = res.data;
-        })
-        .catch((err) => {
-          console.log(err.response.data);
-        });
+      this.$axios.get("users/menus").then((res) => {
+        this.menus = res.data;
+      });
     }
   }
 };

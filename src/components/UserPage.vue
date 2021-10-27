@@ -127,7 +127,6 @@ export default {
           this.getUsers();
         })
         .catch((err) => {
-          this.$message.error(err.response.data);
           this.getUsers();
         });
     },
@@ -147,9 +146,6 @@ export default {
         .then((res) => {
           this.total = res.data.total;
           this.users = res.data.items;
-        })
-        .catch((err) => {
-          this.$message.error(res.response.data);
         });
     },
     showDialog(row) {
@@ -160,24 +156,14 @@ export default {
       this.dialogFormVisible = true;
     },
     getAllRoles() {
-      this.$axios
-        .get("roles")
-        .then((res) => {
-          this.roles = res.data;
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data);
-        });
+      this.$axios.get("roles").then((res) => {
+        this.roles = res.data;
+      });
     },
     getUserRoles(id) {
-      this.$axios
-        .get(`users/${id}/roles`)
-        .then((res) => {
-          this.checkedRoleIds = res.data;
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data);
-        });
+      this.$axios.get(`users/${id}/roles`).then((res) => {
+        this.checkedRoleIds = res.data;
+      });
     },
     updateUserRoles() {
       this.dialogFormVisible = false;
@@ -187,9 +173,6 @@ export default {
         })
         .then((res) => {
           this.$message.success("用户角色更新成功");
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data);
         });
     },
     handleCheckedRolesChange(value) {

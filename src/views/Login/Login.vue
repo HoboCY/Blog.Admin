@@ -93,18 +93,15 @@ export default {
       }
       this.loading = true;
       await this.simulateLogin();
-      this.$axios
+      await this.$axios
         .post("users/login", {
           Email: this.loginModel.email,
           Password: this.loginModel.password
         })
         .then((res) => {
           localStorage.setItem("token", res.data.token);
-          this.$message.success("登陆成功");
+          this.$message.success("登录成功");
           this.$router.push({ name: "PostManage" });
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data);
         });
       this.loading = false;
     }

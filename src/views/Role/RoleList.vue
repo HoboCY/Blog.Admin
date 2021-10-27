@@ -26,16 +26,11 @@ export default {
         cancelButtonText: "取消"
       })
         .then(({ value }) => {
-          this.$axios
-            .post("roles", { Role: value })
-            .then((res) => {
-              console.log(res);
-              this.$message.success("添加成功");
-              this.$refs.rolePage.getRoles();
-            })
-            .catch((err) => {
-              this.$message.error(err.response.data);
-            });
+          this.$axios.post("roles", { Role: value }).then((res) => {
+            console.log(res);
+            this.$message.success("添加成功");
+            this.$refs.rolePage.getRoles();
+          });
         })
         .catch((err) => {
           this.$message.warning("取消修改");

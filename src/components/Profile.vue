@@ -25,14 +25,9 @@ export default {
   },
   methods: {
     getProfile() {
-      this.$axios
-        .get("users/profile")
-        .then((res) => {
-          this.username = res.data.username;
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data);
-        });
+      this.$axios.get("users/profile").then((res) => {
+        this.username = res.data.username;
+      });
     },
     quit() {
       this.$confirm("确定要退出?", "提示", {
@@ -41,18 +36,12 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "退出成功!"
-          });
+          this.$message.success("退出成功!");
           localStorage.clear();
           this.$router.push({ name: "Login" });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消"
-          });
+          this.$message.info("取消操作");
         });
     }
   }

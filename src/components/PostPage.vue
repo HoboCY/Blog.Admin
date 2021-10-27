@@ -113,15 +113,10 @@ export default {
       this.$router.push({ name: "EditPost", params: { id: row.id } });
     },
     recyclePost(id) {
-      this.$axios
-        .put(`posts/recycle/${id}`)
-        .then((res) => {
-          this.$message.success("操作成功");
-          this.getOwnPosts();
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data);
-        });
+      this.$axios.put(`posts/recycle/${id}`).then((res) => {
+        this.$message.success("操作成功");
+        this.getOwnPosts();
+      });
     },
     recycle(row) {
       this.confirm(
@@ -146,15 +141,10 @@ export default {
       );
     },
     restorePost(id) {
-      this.$axios
-        .put(`posts/restore/${id}`)
-        .then((res) => {
-          this.$message.success("恢复成功");
-          this.getOwnPosts();
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data);
-        });
+      this.$axios.put(`posts/restore/${id}`).then((res) => {
+        this.$message.success("恢复成功");
+        this.getOwnPosts();
+      });
     },
     remove(row) {
       this.confirm(
@@ -168,15 +158,10 @@ export default {
       );
     },
     deletePost(id) {
-      this.$axios
-        .delete(`posts/${id}`)
-        .then((res) => {
-          this.$message.success("删除成功");
-          this.getOwnPosts();
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data);
-        });
+      this.$axios.delete(`posts/${id}`).then((res) => {
+        this.$message.success("删除成功");
+        this.getOwnPosts();
+      });
     },
     formatterTime: function(row, column, cellValue) {
       if (cellValue != null) {
@@ -214,9 +199,6 @@ export default {
         .then((res) => {
           this.total = res.data.total;
           this.posts = res.data.items;
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data);
         });
     },
     handleSizeChange(pageSize) {

@@ -1,9 +1,15 @@
 <template>
   <el-container>
     <el-main>
-      <el-input v-model="title" placeholder="请输入标题" @input="titleInput"></el-input>
+      <el-input
+        v-model="title"
+        placeholder="请输入标题"
+        @input="titleInput"
+      ></el-input>
       <div id="vditor"></div>
-      <el-button type="success" @click="addOrEditPost" :disabled="disabled">保存</el-button>
+      <el-button type="success" @click="addOrEditPost" :disabled="disabled">
+        保存
+      </el-button>
     </el-main>
     <el-aside>
       <el-card class="box-card">
@@ -51,14 +57,9 @@ export default {
   },
   methods: {
     getCategories() {
-      this.$axios
-        .get("categories")
-        .then(res => {
-          this.categories = res.data;
-        })
-        .catch(err => {
-          this.$message.error(err.response.data);
-        });
+      this.$axios.get("categories").then((res) => {
+        this.categories = res.data;
+      });
     },
     configureEditor() {
       let that = this;
@@ -111,7 +112,7 @@ export default {
       }
     },
     getPost(id) {
-      this.$axios.get(`posts/${id}`).then(res => {
+      this.$axios.get(`posts/${id}`).then((res) => {
         this.title = res.data.title;
         this.contentVditor.insertValue(res.data.content, false);
         this.categoryIds = res.data.categoryIds;
@@ -124,11 +125,8 @@ export default {
           CategoryIds: this.categoryIds,
           Content: content
         })
-        .then(res => {
+        .then((res) => {
           this.$message.success("保存成功");
-        })
-        .catch(err => {
-          this.$message.error("保存失败");
         });
     },
     editPost(content) {
@@ -138,11 +136,8 @@ export default {
           CategoryIds: this.categoryIds,
           Content: content
         })
-        .then(res => {
+        .then((res) => {
           this.$message.success("保存成功");
-        })
-        .catch(err => {
-          this.$message.error("保存失败");
         });
     },
     change(val) {

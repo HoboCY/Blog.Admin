@@ -144,15 +144,10 @@ export default {
         });
     },
     updateRole(id, role) {
-      this.$axios
-        .put(`roles/${id}`, { Role: role })
-        .then((res) => {
-          this.$message.success("修改成功");
-          this.getRoles();
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data);
-        });
+      this.$axios.put(`roles/${id}`, { Role: role }).then((res) => {
+        this.$message.success("修改成功");
+        this.getRoles();
+      });
     },
     formatterTime: function(row, column, cellValue) {
       if (cellValue != null) {
@@ -160,14 +155,9 @@ export default {
       }
     },
     getRoles() {
-      this.$axios
-        .get("roles")
-        .then((res) => {
-          this.roles = res.data;
-        })
-        .catch((err) => {
-          this.$message.error(res.response.data);
-        });
+      this.$axios.get("roles").then((res) => {
+        this.roles = res.data;
+      });
     },
     showDialog(row) {
       let id = row.id;
@@ -177,24 +167,14 @@ export default {
       this.dialogFormVisible = true;
     },
     getAllPermissions() {
-      this.$axios
-        .get("roles/permissions")
-        .then((res) => {
-          this.permissions = res.data;
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data);
-        });
+      this.$axios.get("roles/permissions").then((res) => {
+        this.permissions = res.data;
+      });
     },
     getRolePermissions(id) {
-      this.$axios
-        .get(`roles/${id}/permissions`)
-        .then((res) => {
-          this.checkedPermissions = res.data;
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data);
-        });
+      this.$axios.get(`roles/${id}/permissions`).then((res) => {
+        this.checkedPermissions = res.data;
+      });
     },
     updatePermissions() {
       this.dialogFormVisible = false;
@@ -204,9 +184,6 @@ export default {
         })
         .then((res) => {
           this.$message.success("权限更新成功");
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data);
         });
     },
     handleCheckedPermissionsChange(value) {
@@ -220,17 +197,12 @@ export default {
       this.isIndeterminate = false;
     },
     getAllMenus() {
-      this.$axios
-        .get("menus")
-        .then((res) => {
-          this.menus = res.data;
-          this.defaultExpandedKeys = this.menus.map((r) => {
-            return r.id;
-          });
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data);
+      this.$axios.get("menus").then((res) => {
+        this.menus = res.data;
+        this.defaultExpandedKeys = this.menus.map((r) => {
+          return r.id;
         });
+      });
     },
     getRoleMenus(id) {
       this.$axios
@@ -265,9 +237,6 @@ export default {
         .then((res) => {
           this.$message.success("修改成功");
           this.dialogTreeVisible = false;
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data);
         });
     }
   }
