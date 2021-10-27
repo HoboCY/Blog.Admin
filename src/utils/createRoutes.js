@@ -3,6 +3,7 @@ import { asyncRoutes } from "@/router";
 // 将菜单信息转成对应的路由信息 动态添加
 export default function createRoutes(data) {
   var routes = buildRoutes(data, asyncRoutes);
+  routes.push({ path: "*", redirect: { name: "404" } });
   return routes;
 }
 
