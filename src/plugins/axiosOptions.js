@@ -28,8 +28,6 @@ instance.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log(error);
-    console.log(error.response);
     if (error.response.status) {
       switch (error.response.status) {
         case 400:
