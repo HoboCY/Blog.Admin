@@ -85,6 +85,37 @@ export default {
             lineNumber: true,
             style: "vs"
           }
+        },
+        upload: {
+          url: `${this.$axios.defaults.baseURL}files`,
+          accept: "image/*",
+          max: 3 * 1024 * 1024,
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`
+          },
+          multiple: false,
+          error(msg) {
+            console.log(msg);
+          },
+          format(files, responseText) {
+            var result = JSON.parse(responseText);
+            let succ = {};
+
+            result.images.forEach((item) => {
+              succ[item.name] = item.url;
+            });
+
+            var formatResult = {
+              msg: "",
+              code: 0,
+              data: {
+                errFiles: [],
+                succMap: succ
+              }
+            };
+            console.log(formatResult);
+            return JSON.stringify(formatResult);
+          }
         }
       });
       return;
