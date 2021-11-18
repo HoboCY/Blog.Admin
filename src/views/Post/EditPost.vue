@@ -6,7 +6,8 @@
         placeholder="请输入标题"
         @input="titleInput"
       ></el-input>
-      <div id="vditor"></div>
+      <!-- <div id="vditor"></div> -->
+      <editor ref="editor" :api-key="apiKey" :init="editorInit" />
       <el-button type="success" @click="addOrEditPost" :disabled="disabled">
         保存
       </el-button>
@@ -33,12 +34,41 @@
 </template>
 
 <script>
-import Vditor from "vditor";
+import Editor from "@tinymce/tinymce-vue";
 
 export default {
+  components: {
+    editor: Editor
+  },
   data() {
     return {
-      contentVditor: "",
+      apiKey: "sbphk7hae9rdwa7wcm2drl5yf5hr7ytu9el8ormscgso0b4b",
+      editorInit: {
+        height: 700,
+        menubar: true,
+        plugins: [
+          "advlist autolink lists link image charmap print preview anchor",
+          "searchreplace visualblocks code fullscreen",
+          "insertdatetime media table paste code help wordcount"
+        ],
+        toolbar:
+          "undo redo | formatselect | bold italic backcolor | \
+           alignleft aligncenter alignright alignjustify | \
+           bullist numlist outdent indent | removeformat | help",
+        images_upload_url: "https://localhost:8011/api/files",
+        images_upload_handler: (blobInfo, success, failure, progress) => {
+          let formData = new FormData();
+          formData.append("file", blobInfo.blob(), blobInfo.filename());
+          this.$axios
+            .post("/files", formData)
+            .then((res) => {
+              success(res.data.location);
+            })
+            .catch((err) => {
+              failure(err.response.data);
+            });
+        }
+      },
       categories: null,
       categoryIds: [],
       title: "",
@@ -53,7 +83,6 @@ export default {
       this.id = id;
       this.getPost(id);
     }
-    this.configureEditor();
   },
   methods: {
     getCategories() {
@@ -61,67 +90,10 @@ export default {
         this.categories = res.data;
       });
     },
-    configureEditor() {
-      let that = this;
-      this.contentVditor = new Vditor("vditor", {
-        mode: "ir",
-        input(value) {
-          that.disabled = false;
-        },
-        toolbarConfig: {
-          pin: true
-        },
-        cache: {
-          enable: false
-        },
-        after: () => {},
-        counter: {
-          enable: true,
-          max: 12000,
-          type: "markdown"
-        },
-        preview: {
-          hljs: {
-            lineNumber: true,
-            style: "vs"
-          }
-        },
-        upload: {
-          url: `${this.$axios.defaults.baseURL}files`,
-          accept: "image/*",
-          max: 3 * 1024 * 1024,
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("token")}`
-          },
-          multiple: false,
-          error(msg) {
-            console.log(msg);
-          },
-          format(files, responseText) {
-            var result = JSON.parse(responseText);
-            let succ = {};
-
-            result.images.forEach((item) => {
-              succ[item.name] = item.url;
-            });
-
-            var formatResult = {
-              msg: "",
-              code: 0,
-              data: {
-                errFiles: [],
-                succMap: succ
-              }
-            };
-            console.log(formatResult);
-            return JSON.stringify(formatResult);
-          }
-        }
-      });
-      return;
-    },
     addOrEditPost() {
-      var content = this.contentVditor.getHTML();
+      console.log(this.$refs.editor);
+      console.log(this.$refs.editor.editor);
+      var content = this.$refs.editor.editor.getContent();
       if (this.title <= 0) {
         this.$message.error("请输入标题");
         return;
@@ -145,8 +117,9 @@ export default {
     getPost(id) {
       this.$axios.get(`posts/${id}`).then((res) => {
         this.title = res.data.title;
-        this.contentVditor.insertValue(res.data.content, false);
         this.categoryIds = res.data.categoryIds;
+        console.log(res.data.content);
+        this.$refs.editor.editor.setContent(res.data.content);
       });
     },
     addPost(content) {

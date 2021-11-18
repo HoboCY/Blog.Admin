@@ -38,6 +38,10 @@ instance.interceptors.response.use(
           Message.error("未授权，请重新登录");
           router.push("/");
           break;
+        case 403:
+          localStorage.removeItem("token");
+          Message.error("授权过期，请重新登录");
+          router.push("/");
         case 404:
           Message.error("资源不存在");
           break;
